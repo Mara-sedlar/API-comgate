@@ -1,3 +1,46 @@
+Tohle je ze stránky WP Booking Calendar, postup jak se má integrovat platební brána která nebyla předdefinována. Zde je link na původní stránku v originál jazyce https://wpbookingcalendar.com/faq/custom-gateway-in-7-0/ 
+--------------------------------------------------------------------------------------------------------------------------------------------
+Integrace vlastní platební brány do rezervačního kalendáře
+Tento návod vysvětluje, jak začít pracovat s integrací vaší platební brány do Booking Calendar Business Small nebo vyšší verze aktualizace 7.0 nebo novější, na základě existující platební brány.
+
+Řekněme, že vaše nová platební brána má název: loc_payment .
+
+1) Musíte vytvořit novou složku, jako je tato:
+
+../{Booking Calendar Folder}/inc/gateways/loc_payment/
+a
+poté vytvořte nový soubor PHP s následujícím názvem:
+
+../{Booking Calendar Folder}/inc/gateways/loc_payment/wpbc-gw-loc_payment.php
+2) Poté můžete zkopírovat/vložit kód ze souboru
+
+../{Booking Calendar Folder}/inc/gateways/stripe/wpbc-gw-stripe_v3.php
+(nebo nějaký jiný, který se vám líbí)
+do nového souboru a podle toho nahraďte obsahové výrazy jako „stripe“ nebo „STRIPE“ na „loc_payment“ nebo „LOC_PAYMENT“.
+
+3) Poté zkontrolujte komentáře týkající se vašeho kódu v tomto novém souboru a nakonfigurujte svůj platební formulář a nastavení ve vztahu k API a informacím nápovědy z webu vaší nové platební brány.
+
+4) Navíc musíte přidat jeden nový háček pro možnost načíst novou platební bránu
+
+// General API for Adding new gateways: 
+function add_my_gateway( $gateway ){ return $gateway . ',gateway_ID'; }
+add_filter( 'wpbc_gateways_original_id_list', 'add_my_gateway' );
+Ve vašem případě musíte mít něco takového:
+
+function add_my_loc_payment( $gateway ){ return $gateway . ',loc_payment'; }
+add_filter( 'wpbc_gateways_original_id_list', 'add_my_loc_payment' );
+5) Pokud má vaše platební brána funkci odezvy, můžete tuto funkci zkontrolovat:
+
+function wpbc_payment_response__stripe_v3( $parsed_response ) {
+
+------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+//Tohle je předdefinovaná platební brána iDEAL v pluginu WP Booking Calendar. 
+-------------------------------------------------------------------------------------------------------------------------------------------------
+
 <?php
 /**
  * @version 1.0
